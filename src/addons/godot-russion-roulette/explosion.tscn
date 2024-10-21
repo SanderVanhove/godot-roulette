@@ -1,0 +1,59 @@
+[gd_scene load_steps=13 format=3 uid="uid://bxg5ettykwrnq"]
+
+[ext_resource type="Script" path="res://addons/godot-russion-roulette/explosion.gd" id="1_dnfye"]
+[ext_resource type="Shader" path="res://addons/godot-russion-roulette/explosion.gdshader" id="1_nov44"]
+[ext_resource type="Texture2D" uid="uid://tdrvi680qkfo" path="res://addons/godot-russion-roulette/assets/Explosion/explosion00.png" id="2_2d66a"]
+[ext_resource type="Texture2D" uid="uid://bwi7t16btaw1r" path="res://addons/godot-russion-roulette/assets/Blacksmoke/blackSmoke21.png" id="2_125us"]
+
+[sub_resource type="Gradient" id="Gradient_o37cf"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j1a0a"]
+gradient = SubResource("Gradient_o37cf")
+
+[sub_resource type="Gradient" id="Gradient_qygvp"]
+offsets = PackedFloat32Array(0, 0.182045, 0.401496, 0.982544)
+colors = PackedColorArray(0, 0, 0, 0, 0.176419, 0.176419, 0.176419, 1, 0.172833, 0.172833, 0.172833, 1, 0.172549, 0.172549, 0.172549, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sg8n2"]
+gradient = SubResource("Gradient_qygvp")
+
+[sub_resource type="Curve" id="Curve_v3j2a"]
+_data = [Vector2(0, 0.63857), 0.0, 0.0, 0, 0, Vector2(0.142191, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.919682), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_y10hd"]
+curve = SubResource("Curve_v3j2a")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7nnei"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 17.2
+initial_velocity_max = 129.03
+angular_velocity_min = -260.57
+angular_velocity_max = 238.86
+gravity = Vector3(0, -200, 0)
+scale_min = 0.1
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_y10hd")
+color_ramp = SubResource("GradientTexture1D_sg8n2")
+color_initial_ramp = SubResource("GradientTexture1D_j1a0a")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3fkd"]
+shader = ExtResource("1_nov44")
+shader_parameter/alpha_amount = 0.0
+
+[node name="Explosion" type="Node2D"]
+script = ExtResource("1_dnfye")
+
+[node name="SmokeParticles" type="GPUParticles2D" parent="."]
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_7nnei")
+texture = ExtResource("2_125us")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.89
+
+[node name="ExplosionFlash" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_b3fkd")
+scale = Vector2(0.145522, 0.145522)
+texture = ExtResource("2_2d66a")
