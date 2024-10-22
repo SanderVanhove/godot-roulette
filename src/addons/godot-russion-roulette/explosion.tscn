@@ -18,7 +18,7 @@ colors = PackedColorArray(0, 0, 0, 0, 0.176419, 0.176419, 0.176419, 1, 0.172833,
 gradient = SubResource("Gradient_qygvp")
 
 [sub_resource type="Curve" id="Curve_v3j2a"]
-_data = [Vector2(0, 0.63857), 0.0, 0.0, 0, 0, Vector2(0.142191, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.919682), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.63857), 0.0, 0.0, 0, 0, Vector2(0.142191, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.694915), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_y10hd"]
@@ -27,33 +27,37 @@ curve = SubResource("Curve_v3j2a")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7nnei"]
 particle_flag_disable_z = true
 spread = 180.0
-initial_velocity_min = 17.2
-initial_velocity_max = 129.03
+initial_velocity_min = 198.2
+initial_velocity_max = 458.47
 angular_velocity_min = -260.57
 angular_velocity_max = 238.86
-gravity = Vector3(0, -200, 0)
+gravity = Vector3(0, -500, 0)
+damping_min = 200.0
+damping_max = 500.0
 scale_min = 0.1
-scale_max = 0.3
+scale_max = 0.5
 scale_curve = SubResource("CurveTexture_y10hd")
 color_ramp = SubResource("GradientTexture1D_sg8n2")
 color_initial_ramp = SubResource("GradientTexture1D_j1a0a")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b3fkd"]
 shader = ExtResource("1_nov44")
-shader_parameter/alpha_amount = 0.0
+shader_parameter/alpha_amount = 0.277778
 
 [node name="Explosion" type="Node2D"]
 script = ExtResource("1_dnfye")
 
 [node name="SmokeParticles" type="GPUParticles2D" parent="."]
 emitting = false
+amount = 20
 process_material = SubResource("ParticleProcessMaterial_7nnei")
 texture = ExtResource("2_125us")
-lifetime = 0.3
+lifetime = 0.8
 one_shot = true
 explosiveness = 0.89
+randomness = 0.52
 
 [node name="ExplosionFlash" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_b3fkd")
-scale = Vector2(0.145522, 0.145522)
+scale = Vector2(0.238806, 0.238806)
 texture = ExtResource("2_2d66a")

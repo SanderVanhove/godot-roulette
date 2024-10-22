@@ -14,19 +14,24 @@ var shake_intensity = 0.0
 var timer = 0.0
 var pitch_increase: float = 0.0
 
+var _exploded_nodes: Array
+
 
 func _enter_tree() -> void:
 	_roulette = RouletteScene.instantiate()
 	get_window().add_child(_roulette)
 	_trigger_audio = _roulette.get_node("TriggerAudio")
 	_shot_audio = _roulette.get_node("ShotAudio")
+	_exploded_nodes = []
 
 
 func _exit_tree() -> void:
+	for node in _exploded_nodes:
+		node.show()
 	remove_control_from_bottom_panel(_roulette)
 	_roulette.queue_free()
-	
-	
+
+
 func _process(delta):
 	var editor = get_editor_interface()
 	
@@ -56,28 +61,21 @@ func _input(event: InputEvent) -> void:
 	_trigger_audio.play()
 
 	await get_tree().process_frame
-	if randf() < 0.5:
+	if randf() < 0.3:
 		return
 
 	shake_screen(0.1, 5.0)
 	_shot_audio.play()
 	spawn_explosion()
-	if get_window().gui_get_focus_owner():
-		get_window().gui_get_focus_owner().hide()
+	
+	var node = get_window().gui_get_focus_owner()
+	if node:
+		node.hide()
+		_exploded_nodes.append(node)
 
 
 func spawn_explosion():
 	var explosion = ExplosionScene.instantiate()
 	get_viewport().add_child(explosion, true)
 	explosion.position = explosion.get_global_mouse_position()
-	
-	explosion.get_node("SmokeParticles").emitting = true
-	
-	var explosion_flash: Sprite2D = explosion.get_node("ExplosionFlash")
-	explosion_flash.material = explosion_flash.material.duplicate()
-	
-	var tween: Tween = create_tween().set_parallel()
-	tween.tween_property(explosion_flash, "scale", explosion_flash.scale, 0.3).from(Vector2(0.1, 0.1)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(explosion_flash.material, "shader_parameter/alpha_amount", 1.0, 0.3).from(0.0)
-	tween.chain().tween_property(explosion_flash.material, "shader_parameter/alpha_amount", 0.0, 0.2)
-	tween.chain().tween_callback(explosion.queue_free).set_delay(0.1)
+	explosion.play()
