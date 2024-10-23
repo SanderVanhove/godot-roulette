@@ -1,12 +1,103 @@
-[gd_scene load_steps=3 format=3 uid="uid://8fgjyhetdjte"]
+[gd_scene load_steps=4 format=3 uid="uid://8fgjyhetdjte"]
 
+[ext_resource type="Script" path="res://addons/godot-russion-roulette/roulette.gd" id="1_0tlrj"]
 [ext_resource type="AudioStream" uid="uid://buwv05n3m53na" path="res://addons/godot-russion-roulette/assets/412298__jaklocke__gun-trigger-pull-5.ogg" id="1_okgoa"]
 [ext_resource type="AudioStream" uid="uid://hwiqg4568q0m" path="res://addons/godot-russion-roulette/assets/128297__xenonn__layered-gunshot-7.wav" id="2_uqs21"]
 
-[node name="Roulette" type="Node2D"]
+[node name="Roulette" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 17
+theme_override_constants/minimum_grab_thickness = 5
+split_offset = 10
+script = ExtResource("1_0tlrj")
 
-[node name="TriggerAudio" type="AudioStreamPlayer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Chance"
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1/"
+horizontal_alignment = 2
+
+[node name="ChanceSpinBox" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 9.22337e+18
+value = 100.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound"
+
+[node name="SoundCheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Screen Shake"
+
+[node name="ScreenShakeCheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Reset UI"
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NodeGraveyard" type="HFlowContainer" parent="Panel/MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Audio" type="Node2D" parent="."]
+
+[node name="TriggerAudio" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("1_okgoa")
 
-[node name="ShotAudio" type="AudioStreamPlayer" parent="."]
+[node name="ShotAudio" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("2_uqs21")
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ChanceSpinBox" to="." method="_on_chance_spin_box_value_changed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer2/SoundCheckButton" to="." method="_on_sound_check_button_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer3/ScreenShakeCheckButton" to="." method="_on_screen_shake_check_button_toggled"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
