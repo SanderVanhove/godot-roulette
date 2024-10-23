@@ -19,9 +19,16 @@ var _exploded_nodes: Dictionary = {}
 var _chance: float = 100.0
 var _sound_enabled: bool = true
 var _screen_shake_enabled: bool = true
+var _do_count_down: bool = false
+var _count: float = _chance
 
 
 func _ready() -> void:
+	_chance = ProjectSettings.get_setting("godot_roulette/average_clicks_to_explosion")
+	_sound_enabled = ProjectSettings.get_setting("godot_roulette/enable_sound")
+	_screen_shake_enabled = ProjectSettings.get_setting("godot_roulette/enable_screen_shake")
+	_do_count_down = ProjectSettings.get_setting("godot_roulette/guarantee_explosion_after_avarage_amount_of_clicks")
+	_count = _chance
 	set_process(false)
 
 
@@ -46,10 +53,13 @@ func _input(event: InputEvent) -> void:
 		return
 
 	await get_tree().process_frame
-	if randf() > 1.0 / _chance:
+	_count -= 1
+	if (not _do_count_down and randf() > 1.0 / _chance) or (_do_count_down and _count <= 0.0):
 		if _sound_enabled:
 			_trigger_audio.play()
 		return
+	
+	_count = _chance
 
 	var node: Control = get_window().gui_get_focus_owner()
 	if node and not node.find_parent("Roulette"):
