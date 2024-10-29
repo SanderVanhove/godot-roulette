@@ -43,7 +43,7 @@ func _enter_tree() -> void:
 	
 	_roulette = RouletteScene.instantiate()
 	_roulette.editor_base_control = get_editor_interface().get_base_control()
-	add_control_to_bottom_panel(_roulette, "Roulette")
+	add_control_to_bottom_panel(_roulette, "Graveyard")
 	_roulette.set_process(true)
 
 

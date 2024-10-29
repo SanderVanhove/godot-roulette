@@ -15,6 +15,7 @@ config/description="Enter an interesting project description here!"
 config/features=PackedStringArray("4.3")
 config/icon="res://icon.png"
 
-[editor_plugins]
+[godot_roulette]
 
-enabled=PackedStringArray("res://addons/godot-russion-roulette/plugin.cfg")
+average_clicks_to_explosion=3
+guarantee_explosion_after_avarage_amount_of_clicks=true

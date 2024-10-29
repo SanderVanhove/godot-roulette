@@ -24,11 +24,8 @@ var _count: float = _chance
 
 
 func _ready() -> void:
-	_chance = ProjectSettings.get_setting("godot_roulette/average_clicks_to_explosion")
-	_sound_enabled = ProjectSettings.get_setting("godot_roulette/enable_sound")
-	_screen_shake_enabled = ProjectSettings.get_setting("godot_roulette/enable_screen_shake")
-	_do_count_down = ProjectSettings.get_setting("godot_roulette/guarantee_explosion_after_avarage_amount_of_clicks")
-	_count = _chance
+	ProjectSettings.settings_changed.connect(on_settings_changed)
+	on_settings_changed()
 	set_process(false)
 
 
@@ -54,12 +51,13 @@ func _input(event: InputEvent) -> void:
 
 	await get_tree().process_frame
 	_count -= 1
-	if (not _do_count_down and randf() > 1.0 / _chance) or (_do_count_down and _count <= 0.0):
+	if (not _do_count_down and randf() > 1.0 / _chance) or (_do_count_down and _count > 0.0):
 		if _sound_enabled:
 			_trigger_audio.play()
 		return
 	
 	_count = _chance
+	print(_count)
 
 	var node: Control = get_window().gui_get_focus_owner()
 	if node and not node.find_parent("Roulette"):
@@ -74,6 +72,14 @@ func _input(event: InputEvent) -> void:
 		
 		shake_screen(0.1, 5.0)
 		spawn_explosion()
+
+
+func on_settings_changed():
+	_chance = ProjectSettings.get_setting("godot_roulette/average_clicks_to_explosion")
+	_sound_enabled = ProjectSettings.get_setting("godot_roulette/enable_sound")
+	_screen_shake_enabled = ProjectSettings.get_setting("godot_roulette/enable_screen_shake")
+	_do_count_down = ProjectSettings.get_setting("godot_roulette/guarantee_explosion_after_avarage_amount_of_clicks")
+	_count = _chance
 
 
 func shake_screen(duration, intensity):
